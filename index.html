@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>Eco Hydrate Garden</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<div class="bg"></div>
+
+<main class="container">
+    <header class="header card">
+        <div>
+            <h1>Eco Hydrate Garden </h1>
+            <p class="sub">Earn eco-coins by hydrating sustainably. Buy a seed. Grow your plant.</p>
+        </div>
+        <div class="scoreBox">
+            <div class="label">Eco-Coins</div>
+            <div class="score" id="ecoPoints">{{ state.eco_points }}</div>
+        </div>
+    </header>
+
+    <section class="grid">
+
+        <!-- LEFT: Progress Ring + Rules under it -->
+        <div class="card">
+            <h2>Eco Progress</h2>
+
+            <div class="ringWrap">
+                <div class="ring" id="ring" aria-label="progress ring">
+                    <img class="waterGif" src="{{ url_for('static', filename='assets/water_pour.gif') }}" alt="Water pouring">
+                    <div class="ringCenter">
+                        <div class="big" id="ecoPointsCenter">{{ state.eco_points }}</div>
+                        <div class="small">eco-coins</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- REQUIRED COINS / RULES UNDER RING -->
+            <div class="rulesBox">
+                <div class="ruleTitle">How you earn eco-coins</div>
+                <ul class="rules">
+                    <li>+{{ rules.refill }} per reusable refill</li>
+                    <li>+{{ rules.recycle }} per recycling</li>
+                    <li>+{{ rules.extra }} per excess water unit</li>
+                </ul>
+
+                <div class="shop">
+                    <div class="shopLine">
+                        <span class="shopLabel">Seed price:</span>
+                        <span class="shopValue">{{ rules.seed_cost }} eco-coins</span>
+                    </div>
+
+                    <button id="buySeedBtn" class="btn secondary">
+                        Buy Seed ({{ rules.seed_cost }})
+                    </button>
+
+                    <div class="shopHint" id="shopHint"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- RIGHT: Virtual Plant -->
+        <div class="card">
+            <h2>Your Virtual Plant</h2>
+
+            <div class="plantArea">
+                <img id="plantImg" class="pixelated" alt="plant"
+                     src=""
+                />
+            </div>
+
+            <div class="plantInfo">
+                <div>Owned seed: <b id="ownedSeed">{{ "Yes" if state.owned_seed else "No" }}</b></div>
+                <div>Stage: <b id="plantStage">{{ state.plant_stage }}</b></div>
+            </div>
+
+            <div class="logBox">
+                <h3>Log Today</h3>
+
+                <div class="row">
+                    <label>Reusable refills</label>
+                    <input id="refills" type="number" min="0" value="1">
+                </div>
+
+                <div class="row">
+                    <label>Recycling actions</label>
+                    <input id="recycles" type="number" min="0" value="0">
+                </div>
+
+                <div class="row">
+                    <label>Excess water units</label>
+                    <input id="extraUnits" type="number" min="0" value="0">
+                    <div class="tiny">You choose what “1 unit” means (e.g., 250ml).</div>
+                </div>
+
+                <button id="logBtn" class="btn">Log & Earn</button>
+                <div class="toast" id="toast"></div>
+
+                <div class="todayTotals">
+                    <div>Refills: <b id="tRefills">{{ state.today.refills }}</b></div>
+                    <div>Recycles: <b id="tRecycles">{{ state.today.recycles }}</b></div>
+                    <div>Excess: <b id="tExtra">{{ state.today.extra_units }}</b></div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+</main>
+
+<script>
+    window.INIT = {
+        ecoPoints: {{ state.eco_points }},
+    ownedSeed: {{ "true" if state.owned_seed else "false" }},
+    plantStage: "{{ state.plant_stage }}",
+        seedCost: {{ rules.seed_cost }}
+    };
+</script>
+<script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>
